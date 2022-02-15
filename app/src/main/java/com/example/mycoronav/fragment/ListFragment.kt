@@ -93,7 +93,7 @@ class ListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 //by whether it can scroll more vertically
                 if(!binding.rvListView.canScrollVertically(1)){
                     Log.d("ddd", "onScrolled: by scroll")
-                    model.loadMore()
+//                    model.loadMore()
                 }
             }
         })

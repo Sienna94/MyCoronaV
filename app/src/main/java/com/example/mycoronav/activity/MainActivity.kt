@@ -1,27 +1,18 @@
 package com.example.mycoronav.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.mycoronav.R
-import com.example.mycoronav.common.Constants
 import com.example.mycoronav.databinding.ActivityMainBinding
 import com.example.mycoronav.fragment.GridFragment
 import com.example.mycoronav.fragment.ListFragment
 import com.example.mycoronav.fragment.ScrollFragment
 import com.example.mycoronav.fragment.ViewPagerFragment
-import com.example.mycoronav.network.RetrofitClient
-import com.example.mycoronav.network.RetrofitService
 import com.example.mycoronav.viewmodel.SharedViewModel
-import com.example.mycoronav.vo.ResponseData
-import com.example.mycoronav.vo.Row
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity(), ListFragment.ListRequestListener,
     GridFragment.ListRequestListener, ScrollFragment.ListRequestListener {

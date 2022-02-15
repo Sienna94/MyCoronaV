@@ -8,23 +8,23 @@ import androidx.lifecycle.ViewModel
 import com.example.mycoronav.common.Constants
 import com.example.mycoronav.repository.RepositoryImpl
 import com.example.mycoronav.vo.Row
+import com.example.mycoronav.vo2.Item
 
 class SharedViewModel : ViewModel() {
     //live data
     var rows_live: MutableLiveData<ArrayList<Row>> = MutableLiveData<ArrayList<Row>>()
-
     //repository
     var repository = RepositoryImpl
-
     //infinite scroll paging
     private var page = 1
 
+    // 페이지당 10개의 결과
     fun getRows() {
-        repository.getItems(Constants.START_INDEX, Constants.COUNT_INDEX)
+        repository.getHospitalItem(Constants.START_PAGE)
         repository.onReturn = {
             rows_live.postValue(it)
         }
-        page = 1
+        page = Constants.START_PAGE
     }
 
     fun deleteRow(row: Row) {
@@ -37,7 +37,8 @@ class SharedViewModel : ViewModel() {
         rows_live.value.let {
             rows_moreLoaded.addAll(it!!)
         }
-        repository.getItems(page * Constants.START_INDEX, Constants.COUNT_INDEX)
+//        repository.getItems(page * Constants.START_INDEX, Constants.COUNT_INDEX)
+        repository.getHospitalItem(page)
         repository.onReturn = {
             rows_moreLoaded.addAll(it)
         }
