@@ -47,7 +47,12 @@
 >   - `_Could not locate ResponseBody converter..._`
 >
 > - *Interceptor*를 통해 통신에 사용된 인증키가 잘못된 형태로 request되는 것을 확인
+>
 >   - 포털에서 제공되는 인증키 중 Decoding을 사용하여 해결 
+>
+>   - 이와 관련해 블로그 포스팅을 작성하였습니다.'
+>
+>     [CLICK!:point_right:](https://velog.io/@siennachang/Retrofit%EC%9C%BC%EB%A1%9C-XML-%ED%8C%8C%EC%8B%B1%ED%95%98%EA%B8%B0-%EC%82%BD%EC%A7%88)
 
 ### 4.3. 기타
 
