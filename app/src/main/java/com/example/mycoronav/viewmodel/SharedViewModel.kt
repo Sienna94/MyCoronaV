@@ -18,7 +18,7 @@ class SharedViewModel : ViewModel() {
     //infinite scroll paging
     private var page = 1
 
-    // 페이지당 10개의 결과
+    // 페이지당 item 10개
     fun getRows() {
         repository.getHospitalItem(Constants.START_PAGE)
         repository.onReturn = {

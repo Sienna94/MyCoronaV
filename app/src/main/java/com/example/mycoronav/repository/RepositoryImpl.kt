@@ -12,70 +12,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-//singleton
 object RepositoryImpl : Repository {
     private val retrofit = RetrofitClient.getInstance()
-    private val retrofitXML = RetrofitClient.getXMLInstance()
     var rows: ArrayList<Row> = ArrayList()
     val retrofitService = retrofit.create(RetrofitService::class.java)
-    val retrofitServiceXml = retrofitXML.create(RetrofitService::class.java)
     var onReturn: ((ArrayList<Row>) -> Unit)? = null
-    var onReturnHospital: ((ArrayList<Item>) -> Unit)? = null
 
-    override fun getItems(startIndex: Int, count: Int) {
-        //create retrofit instance
-        //request data from API
-        rows.clear()
-        retrofitService.getCoronaList(
-            Constants.KEY,
-            Constants.TYPE,
-            Constants.SERVICE,
-            startIndex,
-            (startIndex + count) - 1
-        )
-            .enqueue(object : Callback<ResponseData> {
-                override fun onResponse(
-                    call: Call<ResponseData>,
-                    response: Response<ResponseData>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d("ddd", "response.code = ${response.code()}")
-                        Log.d("ddd", "response.message = ${response.message()}")
-                        response.body()?.let {
-                            for (row in it.corona19Status.row) {
-                                    rows.add(row)
-                            }
-                            onReturn?.invoke(rows)
-                        }
-                    } else {
-                        Log.d("ddd", "onResponse: notSuccessful")
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-                    Log.d("ddd", "onFailure: t = ${t.message}")
-                }
-            })
-    }
-
-    override fun deleteRow(row: Row): ArrayList<Row> {
-        val rowsDeletedData: ArrayList<Row>
-        rows.run {
-            this.remove(row)
-            rowsDeletedData = this
-            rows = rowsDeletedData
-        }
-        return rows
-    }
-
-//    override fun getHospitalItem(rowNum: Int, pageNum: Int) {
     override fun getHospitalItem(pageNum: Int) {
         val params = mapOf(
             "serviceKey" to Constants.KEY,
             "pageNo" to pageNum.toString()
-//            "numOfRows" to rowNum.toString()
         )
-        retrofitServiceXml.getHospitalList(
+        retrofitService.getHospitalList(
             params
         ).enqueue(object : Callback<Hospital> {
             override fun onResponse(call: Call<Hospital>, response: Response<Hospital>) {
@@ -107,5 +55,15 @@ object RepositoryImpl : Repository {
             }
 
         })
+    }
+
+    override fun deleteRow(row: Row): ArrayList<Row> {
+        val rowsDeletedData: ArrayList<Row>
+        rows.run {
+            this.remove(row)
+            rowsDeletedData = this
+            rows = rowsDeletedData
+        }
+        return rows
     }
 }
