@@ -40,10 +40,7 @@ class ScrollViewItem: FrameLayout{
     }
 
     fun bind(rowItem: Row){
-        binding.tvId.text = rowItem.corona19Id
-        binding.tvArea.text = rowItem.corona19Area
-        binding.tvContactHistory.text = rowItem.corona19ContactHistory
-        binding.tvInfectedDate.text = rowItem.corona19Date
+        binding.item = rowItem
         binding.delBtn.setOnClickListener { onClickDel?.invoke(rowItem) }
     }
 }
