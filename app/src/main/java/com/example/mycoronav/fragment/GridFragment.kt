@@ -2,20 +2,16 @@ package com.example.mycoronav.fragment
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.mycoronav.R
-import com.example.mycoronav.activity.MainActivity
 import com.example.mycoronav.adapter.GridViewAdapter
 import com.example.mycoronav.databinding.FragmentGridBinding
-import com.example.mycoronav.databinding.FragmentListBinding
 import com.example.mycoronav.viewmodel.SharedViewModel
 import com.example.mycoronav.vo.Row
 

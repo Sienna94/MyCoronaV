@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), ListFragment.ListRequestListener,
         transaction.commit()
     }
 
-    fun getCoronaList() {
+    private fun getCoronaList() {
         //show progressbar
         binding.progressCircular.visibility = View.VISIBLE
         viewModel.getRows()
@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity(), ListFragment.ListRequestListener,
     }
 
     override fun requestList() {
-        Log.d("ddd", "requestList: Activity start")
         getCoronaList()
     }
 }

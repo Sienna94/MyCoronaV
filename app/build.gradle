@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.mycoronav"
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         //
@@ -47,7 +47,7 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.2.3'
     // Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-//    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
     //xml parser

@@ -32,17 +32,9 @@ class ListViewAdapter(context: Context) : RecyclerView.Adapter<ListViewAdapter.V
     }
 
     inner class ViewHolder(binding: ItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        var id: TextView = binding.tvId
-        var area: TextView = binding.tvArea
-        var history: TextView = binding.tvContactHistory
-        var date: TextView = binding.tvInfectedDate
-        var btn_del: ImageView = binding.delBtn
         fun bind(rowItem: Row) {
-            id.text = rowItem.corona19Id
-            area.text = rowItem.corona19Area
-            history.text = rowItem.corona19ContactHistory
-            date.text = rowItem.corona19Date
-            btn_del.setOnClickListener { onClickDel?.invoke(rowItem)}
+            binding.item = rowItem
+            binding.delBtn.setOnClickListener { onClickDel?.invoke(rowItem)}
         }
     }
 }

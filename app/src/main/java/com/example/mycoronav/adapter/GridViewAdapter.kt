@@ -33,15 +33,8 @@ class GridViewAdapter(context: Context)
     }
 
     inner class ViewHolder(binding: ItemRowGridBinding) : RecyclerView.ViewHolder(binding.root){
-        var id: TextView = binding.tvId
-        var area: TextView = binding.tvArea
-        var history: TextView = binding.tvContactHistory
-        var date: TextView = binding.tvInfectedDate
         fun bind(rowItem: Row) {
-            id.text = rowItem.corona19Id
-            area.text = rowItem.corona19Area
-            history.text = rowItem.corona19ContactHistory
-            date.text = rowItem.corona19Date
+            binding.item = rowItem
             binding.delBtn.setOnClickListener { onClickDel?.invoke(rowItem)}
         }
     }

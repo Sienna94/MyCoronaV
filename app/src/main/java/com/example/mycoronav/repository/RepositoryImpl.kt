@@ -19,6 +19,8 @@ object RepositoryImpl : Repository {
     var onReturn: ((ArrayList<Row>) -> Unit)? = null
 
     override fun getHospitalItem(pageNum: Int) {
+        val currentRows = ArrayList<Row>()
+
         val params = mapOf(
             "serviceKey" to Constants.KEY,
             "pageNo" to pageNum.toString()
@@ -38,9 +40,14 @@ object RepositoryImpl : Repository {
                                     this.corona19Date = item.addr
                                     this.corona19ContactHistory = item.yadmNm
                                 }
-                                rows.add(row)
+                                currentRows.add(row)
                             }
-                            onReturn?.invoke(rows)
+                            if(pageNum == 1){
+                                onReturn?.invoke(currentRows)
+                                rows = currentRows
+                            }else{
+                                rows.addAll(currentRows)
+                            }
                         }
                     } else {
                         Log.d("ddd", "onResponse: not notSuccessful/ ${response.code()}")
@@ -64,6 +71,12 @@ object RepositoryImpl : Repository {
             rowsDeletedData = this
             rows = rowsDeletedData
         }
+        return rows
+    }
+
+    override fun loadNextRow(pageNum: Int): ArrayList<Row> {
+        //load Next Row
+        getHospitalItem(pageNum)
         return rows
     }
 }
