@@ -24,7 +24,7 @@
 <img src="https://user-images.githubusercontent.com/69448123/154096395-0614d164-e0e0-421c-b770-b80b5104f1a1.png" alt="codit1-1" style="zoom:67%;" />
 
 - 코로나 검사 및 진료 가능한 병원 리스트를 제공
--  `LiveData` 사용 UI 업데이트
+- `LiveData` 사용 UI 업데이트
   -  `ListFragment`, `GridFragment`, `ScrollFragment` 이 데이터를 공유하며, 아이템 삭제시 실시간으로 모든 프래그먼트에 반영
 
 
@@ -44,6 +44,7 @@
 ### 4.1.  Retrofit으로 XML 파싱 오류
 
 > - API를 교체하는 과정에서 XML 컨버팅이 제대로 되지 않는 오류 발생
+>
 >   - `_Could not locate ResponseBody converter..._`
 >
 > - *Interceptor*를 통해 통신에 사용된 인증키가 잘못된 형태로 request되는 것을 확인
@@ -117,8 +118,70 @@
 ## 5. 회고/ 느낀 점
 
 - MVVM 패턴에 대한 잘못된 이해
-  - 그냥 ViewModel 사용하고 LiveData로 데이터를 넣으면 되겠지하고 안일한 마음으로 임했습니다. Fragment와 Activity 간에서의 데이터 전달이 편해지겠지하는 단순한 마음에 시작했기 때문입니다.
-  -  View와 ViewModel의 역할분리를 명확하게 구현하지 못한 점이 아쉽습니다.
-- 최신 안드로이드 개발 도구를 목적으로 했기에, 다양한 기능을 구현하지 못한 것이 아쉽습니다.
+
+  - Fragment와 Activity 간에서의 데이터 전달 문제를 해결하기 위한 수단으로 접근했고, 명확한 이해 없이 ViewModel과 LiveData를 사용했습니다. 
+
+  - _View와 ViewModel의 역할분리_를 명확하게 구현하지 못한 점이 아쉽습니다.   
+
+    :point_right: View가 ViewModel을 옵저빙하는 과정에서의 의존성을 줄이기 위해 _DataBinding_을 적용했습니다. **Mar6th**
+
+    - 기존코드에서 adapter의 ViewHolder에서 view에 일일히 bind 해주었던 것을 xml에서 처리하도록 하여 보일러플레이트 코드를 줄였습니다.
+
+      - 기존
+
+        ```kotlin
+        inner class ViewHolder(binding: ItemRowGridBinding) : RecyclerView.ViewHolder(binding.root){
+            var id: TextView = binding.tvId
+            var area: TextView = binding.tvArea
+            var history: TextView = binding.tvContactHistory
+            var date: TextView = binding.tvInfectedDate
+            
+            fun bind(rowItem: Row) {
+                id.text = rowItem.corona19Id
+                area.text = rowItem.corona19Area
+                history.text = rowItem.corona19ContactHistory
+                date.text = rowItem.corona19Date
+                binding.delBtn.setOnClickListener { onClickDel?.invoke(rowItem)}
+            }
+        }
+        ```
+
+      - 변경
+
+        ```kotlin
+        inner class ViewHolder(binding: ItemRowGridBinding) : RecyclerView.ViewHolder(binding.root){
+            
+            fun bind(rowItem: Row) {
+                binding.item = rowItem
+                binding.delBtn.setOnClickListener { onClickDel?.invoke(rowItem)}
+            }
+        }
+        ```
+
+        ```xml
+        <?xml version="1.0" encoding="utf-8"?>
+        <layout xmlns:android="http://schemas.android.com/apk/res/android">
+            <data>
+                <variable
+                    name="item"
+                    type="com.example.mycoronav.vo.Row" />
+            </data>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+        ...
+                        <TextView
+                            android:text="@{item.corona19Date}"/>
+        ...
+        ```
+
+        
+
+- 최신 안드로이드 개발 도구를 목적으로 했기에, 다양한 기능을 구현하지 못한 것이 아쉽습니다. 
+
+  - 검색 기능, 지역별 카테고리 기능 등을 추가할 예정입니다
+
 - Http통신시 Interceptor를 통한 로그 확인의 중요성을 느꼈습니다.
 
+- API 교체로 RetrofitClient, RepositoryImpl, POJO class 등이 정리되지 않았습니다. 향후 사용하지 않는 코드를 정리할 예정입니다. 
