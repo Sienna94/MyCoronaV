@@ -1,3 +1,6 @@
+
+
+
 # :mask: MyCoronaV
 
 > 코로나 검사 및 진료 가능한 병원 리스트를 제공하는 개인 프로젝트
@@ -24,8 +27,70 @@
 <img src="https://user-images.githubusercontent.com/69448123/154096395-0614d164-e0e0-421c-b770-b80b5104f1a1.png" alt="codit1-1" style="zoom:67%;" />
 
 - 코로나 검사 및 진료 가능한 병원 리스트를 제공
+
+- _Single Activity Multiple Fragment_구조
+
+  - Activity : `MainActivity`
+  - Fragment : `ViewPagerFragment` 에  `GridFragment` / `ListFragment` / `ScrollFragment`  을 넣어준 형태
+    - ListFragment : RecyclerView
+    - GridFragment : GridView
+    - ScrollFragment : ScrollView에 item을 addView
+    - 아이템레이아웃은 `item_row.xml`을 재사용
+
 - `LiveData` 사용 UI 업데이트
-  -  `ListFragment`, `GridFragment`, `ScrollFragment` 이 데이터를 공유하며, 아이템 삭제시 실시간으로 모든 프래그먼트에 반영
+
+  - `ListFragment`, `GridFragment`, `ScrollFragment` 이 동일한 데이터를 observe
+
+  - 해당 ViewModel은 MainActivity에서 선언. 이를 위해 `activityViewModels()`를 활용
+
+    - Activity  : 설명
+
+      ```kotlin
+      class MainActivity : AppCompatActivity(), ListFragment.ListRequestListener,
+          GridFragment.ListRequestListener, ScrollFragment.ListRequestListener {
+      ...
+          //viewModel
+          val viewModel: SharedViewModel by viewModels()
+      
+          override fun onCreate(savedInstanceState: Bundle?) {
+      ...
+              getCoronaList()
+              viewModel.rows_live.run {
+                  setFragments()		//viewModel
+              }
+          }
+              
+      ...
+      
+          private fun getCoronaList() {
+              ...
+              viewModel.getRows()
+      		...
+          }
+      
+      ```
+
+    - Fragments  : 설명
+
+      ```kotlin
+      class ListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+      ...	
+          private val model: SharedViewModel by activityViewModels()
+      
+      }
+      ```
+
+    
+
+  - 각각의 프래그먼트에서 아이템 삭제시 실시간으로 모든 프래그먼트 UI에 반영 
+
+    ```kotlin
+    class SharedViewModel : ViewModel() {
+        //live data
+        var rows_live: MutableLiveData<ArrayList<Row>> = MutableLiveData<ArrayList<Row>>()
+    ```
+
+    - `MutableLiveData` 를 사용하여 아이템 삭제로 인한 데이터 수정이 가능하도록 함. 
 
 
 
@@ -185,3 +250,6 @@
 - Http통신시 Interceptor를 통한 로그 확인의 중요성을 느꼈습니다.
 
 - API 교체로 RetrofitClient, RepositoryImpl, POJO class 등이 정리되지 않았습니다. 향후 사용하지 않는 코드를 정리할 예정입니다. 
+
+
+
